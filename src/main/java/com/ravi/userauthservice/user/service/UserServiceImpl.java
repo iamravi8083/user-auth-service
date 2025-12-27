@@ -1,5 +1,7 @@
 package com.ravi.userauthservice.user.service;
 
+import com.ravi.userauthservice.exception.ResourceNotFoundException;
+import com.ravi.userauthservice.exception.UserAlreadyExistsException;
 import com.ravi.userauthservice.role.entity.Role;
 import com.ravi.userauthservice.role.repository.RoleRepository;
 import com.ravi.userauthservice.user.entity.User;
@@ -25,7 +27,7 @@ class UserServiceImpl implements UserService{
     @Override
     public User registerUser(User user) {
         if(userRepository.existsByEmail(user.getEmail())){
-            throw new RuntimeException("User already exist");
+            throw new UserAlreadyExistsException("User already exist");
         }
         Role role = roleRepository.findByName("USER")
                 .orElseThrow(() ->new RuntimeException("Role not found"));
@@ -37,6 +39,6 @@ class UserServiceImpl implements UserService{
     @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(()-> new RuntimeException("user not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("user not found"));
     }
 }

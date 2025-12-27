@@ -1,5 +1,6 @@
 package com.ravi.userauthservice.auth.service;
 
+import com.ravi.userauthservice.exception.InvalidCredentialException;
 import com.ravi.userauthservice.user.entity.User;
 import com.ravi.userauthservice.user.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,7 +22,7 @@ class AuthServiceImpl implements AuthService{
        User user= userService.getUserByEmail(email);
 
        if(!passwordEncoder.matches(password,user.getPassword())){
-           throw new RuntimeException("invalid credential");
+           throw new InvalidCredentialException("invalid credential");
        }
         return user;
     }
