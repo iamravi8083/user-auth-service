@@ -34,10 +34,15 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse("user register successfully"));
 
     }
+
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request){
-        authService.authenticate(request.getEmail(),request.getPassword());
-        return ResponseEntity.ok(new AuthResponse("Login Successfully"));
+
+        String token = authService.login(
+                request.getEmail(),
+                request.getPassword()
+        );
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 
 }
