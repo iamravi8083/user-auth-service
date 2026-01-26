@@ -29,6 +29,6 @@ class AuthServiceImpl implements AuthService{
     @Override
     public String login(String email , String password){
         User user = authenticate(email, password);
-    return jwtUtil.generateToken(user.getEmail());
+    return jwtUtil.generateToken(user);
     }
 }

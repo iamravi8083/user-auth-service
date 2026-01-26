@@ -29,9 +29,9 @@ class UserServiceImpl implements UserService{
         if(userRepository.existsByEmail(user.getEmail())){
             throw new UserAlreadyExistsException("User already exist");
         }
-        Role role = roleRepository.findByName("USER")
+        Role role = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() ->new RuntimeException("Role not found"));
-        user.setRoles(Set.of(role));
+        user.setRole(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }

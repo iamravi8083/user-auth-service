@@ -32,4 +32,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @Column(name = "role_id")
+    private Role role;
 }

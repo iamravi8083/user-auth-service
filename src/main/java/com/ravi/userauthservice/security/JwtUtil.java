@@ -1,5 +1,6 @@
 package com.ravi.userauthservice.security;
 
+import com.ravi.userauthservice.user.entity.User;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,9 +25,10 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(String email){
+    public String generateToken(User user){
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(user.getEmail())
+                .claim("role",user.getRole().getName())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSigningKey(),SignatureAlgorithm.HS256)
@@ -41,6 +43,16 @@ public class JwtUtil {
                 .getBody()
                 .getSubject();
     }
+
+    public String extractRole(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role",String.class);
+    }
+
     public boolean isTokenValid(String token){
         try {
             Jwts.parserBuilder()
